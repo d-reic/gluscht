@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gluscht – Ernährungscoaching, Mahlzeit für Mahlzeit</title>
+<meta name="description" content="Gluscht begleitet 1:1-Ernährungscoaching: eine iPhone-App für Klientinnen und Klienten, ein Web-Dashboard für den Coach. Der Coach schreibt den Plan, die App beschreibt, was passiert.">
+<meta property="og:title" content="Gluscht">
+<meta property="og:description" content="Der Plan deines Coachs, Mahlzeit für Mahlzeit.">
+<meta property="og:image" content="icon.png">
+<meta name="theme-color" content="#f3ecdf" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c1a15" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Tokens from the Gluscht design system (tokens.json) */
+:root {
+  --sand-100:#f3ecdf; --sand-200:#e9dfcd; --surface:#fbf8f1;
+  --line:#b9ab8e; --line-strong:#8a7d62;
+  --ink:#25261c; --ink-muted:#5f5e4c;
+  --olive:#5c6b2a; --olive-strong:#46531e; --olive-tint:#e2e6c8; --on-olive:#ffffff;
+  --pink:#e8a5b4; --pink-tint:#f7dfe3; --on-pink:#25261c;
+  --berry:#8e2f5c; --berry-tint:#f1d9e3; --on-berry:#ffffff;
+  --positive:#3b6f45; --warning:#8f5410; --negative:#a8352a;
+  --font-display:"Bricolage Grotesque","Geist",system-ui,sans-serif;
+  --font-text:"Geist",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-6:24px; --space-8:32px; --space-12:48px;
+  --radius-sm:6px; --radius-md:10px; --radius-lg:16px; --radius-pill:999px;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --sand-100:#1c1a15; --sand-200:#26231c; --surface:#2a2720;
+    --line:#6b6352; --line-strong:#8a8170;
+    --ink:#f1ebdd; --ink-muted:#b5ad99;
+    --olive:#a9b866; --olive-strong:#c2cf85; --olive-tint:#343a1f; --on-olive:#1c1a15;
+    --pink:#d98fa1; --pink-tint:#45272e; --on-pink:#1c1a15;
+    --berry:#e08bb0; --berry-tint:#47233a; --on-berry:#1c1a15;
+    --positive:#86c592; --warning:#e3a857; --negative:#ef8f84;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--sand-100); color: var(--ink);
+  font-family: var(--font-text); font-size: 16px; line-height: 24px;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--olive-strong); }
+a:focus-visible { outline: 2px solid var(--olive-strong); outline-offset: 2px; border-radius: var(--radius-sm); }
+h1, h2, h3 { font-family: var(--font-display); margin: 0; text-wrap: balance; }
+p { margin: 0; }
+.num { font-variant-numeric: tabular-nums; }
+
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 var(--space-4); }
+@media (min-width: 720px) { .wrap { padding: 0 var(--space-8); } }
+
+/* Components from bundle.css ------------------------------------------- */
+.gl-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+  min-height: 44px; padding: var(--space-2) var(--space-4);
+  border: 1px solid transparent; border-radius: var(--radius-md);
+  background: var(--olive); color: var(--on-olive);
+  font: 600 14px/20px var(--font-text); cursor: pointer; text-decoration: none;
+}
+.gl-btn:hover { background: var(--olive-strong); }
+.gl-btn:focus-visible { outline: 2px solid var(--olive-strong); outline-offset: 2px; }
+.gl-btn--ghost { background: var(--surface); color: var(--ink); border-color: var(--line-strong); }
+.gl-btn--ghost:hover { background: var(--sand-200); }
+.gl-btn--accent { background: var(--berry); color: var(--on-berry); border-radius: var(--radius-pill); }
+.gl-btn--accent:hover { background: var(--berry); filter: brightness(.92); }
+.gl-btn--small { min-height: 32px; padding: var(--space-1) var(--space-3); }
+
+.gl-card {
+  display: flex; flex-direction: column; gap: var(--space-3);
+  padding: var(--space-6); border: 1px solid var(--line); border-radius: var(--radius-lg);
+  background: var(--surface); color: var(--ink);
+}
+.gl-card__title { font-family: var(--font-display); font-size: 20px; line-height: 26px; font-weight: 600; }
+.gl-card__text { font-size: 14px; line-height: 20px; color: var(--ink-muted); }
+
+.gl-pill {
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  padding: var(--space-1) var(--space-3) var(--space-1) var(--space-2);
+  border: 1px solid currentColor; border-radius: var(--radius-pill); background: var(--surface);
+  font-size: 12px; line-height: 16px; font-weight: 600; white-space: nowrap;
+}
+.gl-pill svg { width: 14px; height: 14px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.gl-pill--on-plan { color: var(--positive); }
+.gl-pill--partly { color: var(--warning); }
+.gl-pill--off-plan { color: var(--negative); }
+.gl-pill--neutral { color: var(--ink-muted); }
+
+.gl-stat {
+  display: flex; flex-direction: column; gap: var(--space-1);
+  padding: var(--space-4) var(--space-6); border: 1px solid var(--line); border-radius: var(--radius-lg);
+  background: var(--surface); min-width: 0;
+}
+.gl-stat__label { font-size: 12px; line-height: 16px; font-weight: 500; color: var(--ink-muted); }
+.gl-stat__value { font-family: var(--font-display); font-size: 28px; line-height: 32px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.gl-stat__sub { font-size: 12px; line-height: 16px; font-weight: 500; color: var(--ink-muted); }
+.gl-stat--accent .gl-stat__value { color: var(--berry); }
+
+.gl-banner {
+  display: flex; flex-direction: column; gap: var(--space-1);
+  padding: var(--space-3) var(--space-4); border-radius: var(--radius-md);
+  background: var(--olive-tint); color: var(--ink); font-size: 14px; line-height: 20px;
+}
+.gl-banner__title { font-weight: 600; }
+.gl-banner--sunken { background: var(--sand-200); }
+
+/* Header --------------------------------------------------------------- */
+.top { padding: var(--space-4) 0; }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+.brand { display: inline-flex; align-items: center; gap: var(--space-3); text-decoration: none; color: var(--ink); }
+.brand img { width: 40px; height: 40px; border-radius: var(--radius-md); }
+.brand span { font-family: var(--font-display); font-weight: 700; font-size: 22px; letter-spacing: -0.01em; }
+.top nav { display: flex; align-items: center; gap: var(--space-6); font-size: 14px; font-weight: 600; }
+.top nav a.plain { color: var(--ink); text-decoration: none; }
+.top nav a.plain:hover { color: var(--olive-strong); }
+@media (max-width: 719px) { .top nav a.plain { display: none; } }
+
+/* Hero ----------------------------------------------------------------- */
+.hero { padding: var(--space-8) 0 var(--space-12); }
+.hero .wrap { display: grid; gap: var(--space-12); align-items: center; }
+@media (min-width: 900px) { .hero .wrap { grid-template-columns: 1.1fr .9fr; } .hero { padding: var(--space-12) 0 80px; } }
+.eyebrow { font-size: 12px; line-height: 16px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-muted); }
+.hero h1 { font-size: clamp(40px, 6.4vw, 64px); line-height: 1.05; letter-spacing: -0.02em; font-weight: 700; margin-top: var(--space-3); }
+.hero .lead { font-size: 18px; line-height: 28px; color: var(--ink-muted); margin-top: var(--space-6); max-width: 34em; }
+.actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-8); }
+.hero .note { margin-top: var(--space-6); font-size: 14px; line-height: 20px; color: var(--ink-muted); }
+
+/* Stage behind the phone: a plate, drawn from discs like the icon */
+.stage { position: relative; display: grid; place-items: center; padding: var(--space-8) 0; }
+.stage::before {
+  content: ""; position: absolute; width: min(92%, 440px); aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle, var(--pink) 0 58%, var(--surface) 58% 74%, transparent 74%);
+}
+.stage .bite {
+  position: absolute; width: 18%; max-width: 76px; aspect-ratio: 1; border-radius: 50%;
+  background: var(--olive); top: 6%; right: 12%;
+}
+
+/* Phone mock: the Today screen rebuilt from the components */
+.phone {
+  position: relative; width: 300px; max-width: 100%;
+  border: 1px solid var(--line); border-radius: 40px; background: var(--sand-100);
+  padding: var(--space-6) var(--space-4) var(--space-4);
+}
+.phone__title { font-family: var(--font-display); font-size: 28px; line-height: 34px; font-weight: 700; }
+.seg { display: flex; padding: 3px; margin-top: var(--space-3); border-radius: var(--radius-pill); background: var(--sand-200); font-size: 12px; line-height: 16px; font-weight: 600; }
+.seg span { flex: 1; text-align: center; padding: 6px 0; border-radius: var(--radius-pill); color: var(--ink-muted); }
+.seg span[aria-current] { background: var(--olive); color: var(--on-olive); }
+.targets { margin-top: var(--space-3); padding: var(--space-3) var(--space-4); border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); display: grid; gap: var(--space-2); }
+.bar { display: grid; gap: 4px; font-size: 12px; line-height: 16px; }
+.bar__row { display: flex; justify-content: space-between; }
+.bar__row b { font-weight: 600; }
+.bar__row span { color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.bar__track { height: 6px; border-radius: var(--radius-pill); background: var(--sand-200); overflow: hidden; }
+.bar__fill { height: 100%; border-radius: inherit; background: var(--olive); }
+.slots { margin-top: var(--space-3); border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); }
+.slot { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); padding: var(--space-3) var(--space-4); }
+.slot + .slot { border-top: 1px solid var(--line); }
+.slot__time { font-size: 12px; line-height: 16px; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.slot__name { font-size: 14px; line-height: 20px; font-weight: 600; }
+.slot__macro { font-size: 12px; line-height: 16px; color: var(--ink-muted); }
+
+/* Sections ------------------------------------------------------------- */
+section.block { padding: var(--space-12) 0; }
+@media (min-width: 720px) { section.block { padding: 80px 0; } }
+.block__head { max-width: 40em; margin-bottom: var(--space-8); }
+.block__head h2 { font-size: clamp(28px, 4vw, 40px); line-height: 1.1; letter-spacing: -0.01em; font-weight: 700; margin-top: var(--space-2); }
+.block__head p { margin-top: var(--space-4); color: var(--ink-muted); font-size: 18px; line-height: 28px; }
+
+.grid { display: grid; gap: var(--space-4); }
+@media (min-width: 640px) { .grid--3, .grid--2 { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 960px) { .grid--3 { grid-template-columns: repeat(3, 1fr); } }
+
+.disc { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--olive-tint); color: var(--olive-strong); flex: none; }
+.disc svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.gl-card ul { margin: 0; padding-left: 1.1em; font-size: 14px; line-height: 20px; color: var(--ink-muted); display: grid; gap: 4px; }
+.pills { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+/* Craving section on pink-tint */
+.craving { background: var(--pink-tint); }
+.craving .wrap { display: grid; gap: var(--space-8); align-items: center; }
+@media (min-width: 900px) { .craving .wrap { grid-template-columns: 1fr 1fr; } }
+.craving .block__head { margin-bottom: 0; }
+.crave-card { display: grid; gap: var(--space-4); }
+.crave-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
+.crave-stats .gl-stat { padding: var(--space-3) var(--space-4); }
+.crave-list { display: grid; gap: var(--space-2); font-size: 14px; line-height: 20px; }
+.crave-list div { display: flex; justify-content: space-between; gap: var(--space-3); padding-top: var(--space-2); border-top: 1px solid var(--line); }
+.crave-list span:last-child { color: var(--ink-muted); text-align: right; }
+@media (max-width: 420px) { .crave-stats { grid-template-columns: 1fr; } }
+
+/* Coach section */
+.coach .wrap { display: grid; gap: var(--space-8); }
+@media (min-width: 960px) { .coach .wrap { grid-template-columns: .9fr 1.1fr; align-items: start; } }
+.coach .block__head { margin-bottom: 0; }
+.dash { border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); overflow: hidden; }
+.dash__head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); padding: var(--space-4) var(--space-6); border-bottom: 1px solid var(--line); }
+.dash__head h3 { font-size: 20px; line-height: 26px; font-weight: 600; }
+.dash__head span { font-size: 12px; line-height: 16px; color: var(--ink-muted); }
+.dash__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); padding: var(--space-4) var(--space-6); }
+@media (max-width: 560px) { .dash__stats { grid-template-columns: 1fr; } }
+table { width: 100%; border-collapse: collapse; font-size: 14px; line-height: 20px; }
+th { background: var(--sand-200); color: var(--ink-muted); font-size: 12px; line-height: 16px; font-weight: 500; text-align: left; padding: var(--space-2) var(--space-6); }
+td { padding: var(--space-3) var(--space-6); border-top: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+.dash__scroll { overflow-x: auto; }
+.coach-list { display: grid; gap: var(--space-4); margin-top: var(--space-8); }
+.coach-list div { display: grid; gap: 2px; }
+.coach-list b { font-weight: 600; }
+.coach-list span { color: var(--ink-muted); font-size: 14px; line-height: 20px; }
+
+/* Principles */
+.principles .gl-card { gap: var(--space-2); }
+
+/* Closing */
+.closing .gl-card { align-items: flex-start; padding: var(--space-8); gap: var(--space-4); }
+.closing h2 { font-size: clamp(28px, 4vw, 40px); line-height: 1.1; font-weight: 700; }
+.closing p { color: var(--ink-muted); max-width: 40em; }
+
+footer { padding: var(--space-8) 0 var(--space-12); font-size: 12px; line-height: 16px; color: var(--ink-muted); }
+footer .wrap { display: grid; gap: var(--space-3); border-top: 1px solid var(--line); padding-top: var(--space-6); }
+footer p { max-width: 60em; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-half" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 4v16"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4L6 18M18 6l1.4-1.4"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 016.5 3H20v15H6.5A2.5 2.5 0 004 20.5z"/><path d="M4 20.5A2.5 2.5 0 016.5 18H20v3H6.5"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0112 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 004 0"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0112 7.6 4.3 4.3 0 0119.5 10c0 5.4-7.5 10-7.5 10z"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#" aria-label="Gluscht, zum Seitenanfang">
+      <img src="icon.png" alt="" width="40" height="40">
+      <span>Gluscht</span>
+    </a>
+    <nav aria-label="Seitennavigation">
+      <a class="plain" href="#app">App</a>
+      <a class="plain" href="#coaches">Für Coaches</a>
+      <a class="plain" href="#grundsaetze">Grundsätze</a>
+      <a class="gl-btn gl-btn--ghost gl-btn--small" href="https://gluscht.vercel.app">Coach-Login</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Ernährungscoaching für iPhone und Web</p>
+        <h1>Der Plan deines Coachs, Mahlzeit für Mahlzeit.</h1>
+        <p class="lead">Gluscht zeigt dir, was heute auf dem Plan steht, macht das Erfassen in unter einer Minute möglich und beschreibt, was deine Daten sagen. Die Ziele setzt dein Coach.</p>
+        <div class="actions">
+          <a class="gl-btn" href="#app">So funktioniert die App</a>
+          <a class="gl-btn gl-btn--ghost" href="#coaches">Für Coaches</a>
+        </div>
+        <p class="note">Gluscht ist in der Pilotphase und läuft über TestFlight. Den Zugang bekommst du über deinen Coach.</p>
+      </div>
+
+      <div class="stage" aria-label="Beispiel: der Bildschirm «Heute» in der App">
+        <div class="bite" aria-hidden="true"></div>
+        <div class="phone">
+          <div class="phone__title">Heute</div>
+          <div class="seg" role="presentation"><span aria-current="true">Trainingstag</span><span>Ruhetag</span></div>
+          <div class="targets">
+            <div class="bar"><div class="bar__row"><b>Energie</b><span>1315 / 2600 kcal</span></div><div class="bar__track"><div class="bar__fill" style="width:51%"></div></div></div>
+            <div class="bar"><div class="bar__row"><b>Protein</b><span>70 / 165 g</span></div><div class="bar__track"><div class="bar__fill" style="width:42%"></div></div></div>
+            <div class="bar"><div class="bar__row"><b>Kohlenhydrate</b><span>160 / 325 g</span></div><div class="bar__track"><div class="bar__fill" style="width:49%"></div></div></div>
+            <div class="bar"><div class="bar__row"><b>Fett</b><span>38 / 70 g</span></div><div class="bar__track"><div class="bar__fill" style="width:54%"></div></div></div>
+          </div>
+          <div class="slots">
+            <div class="slot"><div><div class="slot__time">07:00</div><div class="slot__name">Frühstück</div><div class="slot__macro num">660 kcal · 35 g Protein</div></div><span class="gl-pill gl-pill--on-plan"><svg><use href="#i-check"/></svg>Nach Plan</span></div>
+            <div class="slot"><div><div class="slot__time">11:45</div><div class="slot__name">Mittagessen</div><div class="slot__macro num">655 kcal · 35 g Protein</div></div><span class="gl-pill gl-pill--partly"><svg><use href="#i-half"/></svg>Teilweise</span></div>
+            <div class="slot"><div><div class="slot__time">17:00</div><div class="slot__name">Vor dem Training</div><div class="slot__macro num">ca. 35 g Kohlenhydrate</div></div><span class="gl-pill gl-pill--neutral">Offen</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="app">
+    <div class="wrap">
+      <div class="block__head">
+        <p class="eyebrow">Die App</p>
+        <h2>Den Plan zur Hand, wenn du isst.</h2>
+        <p>Kein PDF mehr öffnen. Gluscht macht aus dem Plan deines Coachs einen Tagesablauf mit Mahlzeiten, Optionen und Rezepten.</p>
+      </div>
+      <div class="grid grid--3">
+        <article class="gl-card">
+          <div class="disc"><svg><use href="#i-sun"/></svg></div>
+          <h3 class="gl-card__title">Heute</h3>
+          <p class="gl-card__text">Trainings- oder Ruhetag, die Ziele des Tages und deine Mahlzeiten mit Uhrzeit. Den Tagestyp liest Gluscht aus Apple Health oder deinem Trainingsplan; du kannst ihn jederzeit ändern.</p>
+        </article>
+        <article class="gl-card">
+          <div class="disc"><svg><use href="#i-camera"/></svg></div>
+          <h3 class="gl-card__title">Erfassen</h3>
+          <ul>
+            <li>Abhaken: nach Plan, teilweise, nicht nach Plan</li>
+            <li>Foto-Schätzung, die du vor dem Speichern prüfst</li>
+            <li>Barcode-Scan und Schweizer Nährwertdatenbank</li>
+            <li>Manuelle Eingabe als Rückfallebene</li>
+          </ul>
+        </article>
+        <article class="gl-card">
+          <div class="disc"><svg><use href="#i-trend"/></svg></div>
+          <h3 class="gl-card__title">Fortschritt</h3>
+          <p class="gl-card__text">Gewicht als Messpunkte mit Trendlinie, das geschätzte tatsächliche Defizit neben dem geplanten, Plantreue und Trainingstage pro Woche.</p>
+        </article>
+        <article class="gl-card">
+          <div class="disc"><svg><use href="#i-book"/></svg></div>
+          <h3 class="gl-card__title">Evidenz</h3>
+          <p class="gl-card__text">Hinter jeder Empfehlung steht eine Evidenzkarte mit eingestufter Studienlage und Quellen. Tippe auf «Warum?», um sie zu lesen.</p>
+        </article>
+        <article class="gl-card">
+          <div class="disc"><svg><use href="#i-bell"/></svg></div>
+          <h3 class="gl-card__title">Erinnerungen</h3>
+          <p class="gl-card__text">Mahlzeiten, Snack vor dem Training, Kreatin, Wägen. Jede einzeln schaltbar, und standardmässig nur die, die du einschaltest.</p>
+        </article>
+        <article class="gl-card">
+          <div class="disc"><svg><use href="#i-heart"/></svg></div>
+          <h3 class="gl-card__title">Apple Health</h3>
+          <p class="gl-card__text">Gewicht, Körperfett und Trainings kommen aus Apple Health, wenn du es erlaubst. Jede Berechtigung lässt sich widerrufen.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block craving">
+    <div class="wrap">
+      <div class="block__head">
+        <p class="eyebrow">Heisshunger-Tracker</p>
+        <h2>Notieren, was da war.</h2>
+        <p>Halte einen Heisshunger fest, wenn er kommt: Stärke, Auslöser, worauf er war und ob du gegessen hast. Gluscht zählt mit und beschreibt die Woche. Kein Urteil, keine Serien, kein Einfluss auf die Plantreue.</p>
+      </div>
+      <div class="gl-card crave-card" aria-label="Beispiel: Heisshunger in einer Woche">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+          <h3 class="gl-card__title">Diese Woche</h3>
+          <span class="gl-btn gl-btn--accent gl-btn--small" aria-hidden="true">Heisshunger notieren</span>
+        </div>
+        <div class="crave-stats">
+          <div class="gl-stat"><span class="gl-stat__label">Notiert</span><span class="gl-stat__value">3</span></div>
+          <div class="gl-stat"><span class="gl-stat__label">Ohne Essen vorbei</span><span class="gl-stat__value">2</span></div>
+          <div class="gl-stat"><span class="gl-stat__label">Ø Stärke</span><span class="gl-stat__value">3.3</span></div>
+        </div>
+        <div class="crave-list">
+          <div><span>Di, 21:40 · Schokolade</span><span>Müdigkeit · Stärke 4</span></div>
+          <div><span>Do, 16:10 · Chips</span><span>Stress · Stärke 3</span></div>
+          <div><span>Sa, 15:30 · Glace</span><span>Gesellschaft · Stärke 3</span></div>
+        </div>
+        <p class="gl-card__text">Häufigster Auslöser: keiner sticht heraus.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block coach" id="coaches">
+    <div class="wrap">
+      <div>
+        <div class="block__head">
+          <p class="eyebrow">Für Coaches</p>
+          <h2>Ein klares Wochenbild vor jedem Check-in.</h2>
+          <p>Im Web-Dashboard schreibst und versionierst du Pläne und siehst, wie es deinen Klientinnen und Klienten geht.</p>
+        </div>
+        <div class="coach-list">
+          <div><b>Klientenliste</b><span>Plantreue der Woche, Richtung des Gewichtstrends, letzter Eintrag. Markiert, wer Aufmerksamkeit braucht.</span></div>
+          <div><b>Planeditor</b><span>Tagestypen, Ziele, Mahlzeiten, bedingte Mahlzeiten, Supplemente, Optionen und Rezepte. Jede Änderung wird eine neue Version mit Gültigkeitsdatum.</span></div>
+          <div><b>PDF-Import</b><span>Lade einen bestehenden Plan hoch. Die KI füllt den Editor, du prüfst jedes Feld vor dem Veröffentlichen.</span></div>
+          <div><b>Check-in-Bericht</b><span>Wöchentliche Zusammenfassung pro Person, im Dashboard oder als PDF.</span></div>
+        </div>
+        <div class="actions"><a class="gl-btn" href="https://gluscht.vercel.app">Zum Coach-Dashboard</a></div>
+      </div>
+
+      <div class="dash" aria-label="Beispiel: Wochenseite im Coach-Dashboard">
+        <div class="dash__head"><h3>Lea M.</h3><span>Woche 46 · Beispieldaten</span></div>
+        <div class="dash__stats">
+          <div class="gl-stat"><span class="gl-stat__label">Plantreue</span><span class="gl-stat__value">82 %</span><span class="gl-stat__sub">6 von 7 Tagen erfasst</span></div>
+          <div class="gl-stat"><span class="gl-stat__label">Trendgewicht</span><span class="gl-stat__value">83.9 kg</span><span class="gl-stat__sub">−0.4 kg zur Vorwoche</span></div>
+          <div class="gl-stat gl-stat--accent"><span class="gl-stat__label">Geschätztes Defizit</span><span class="gl-stat__value">430 kcal</span><span class="gl-stat__sub">geplant 500 kcal</span></div>
+        </div>
+        <div class="dash__scroll">
+          <table>
+            <thead><tr><th>Tag</th><th>Typ</th><th>Energie</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Mo</td><td>Training</td><td>2580 kcal</td><td><span class="gl-pill gl-pill--on-plan"><svg><use href="#i-check"/></svg>Nach Plan</span></td></tr>
+              <tr><td>Di</td><td>Ruhe</td><td>2410 kcal</td><td><span class="gl-pill gl-pill--partly"><svg><use href="#i-half"/></svg>Teilweise</span></td></tr>
+              <tr><td>Mi</td><td>Training</td><td>2630 kcal</td><td><span class="gl-pill gl-pill--on-plan"><svg><use href="#i-check"/></svg>Nach Plan</span></td></tr>
+              <tr><td>Do</td><td>Ruhe</td><td>2890 kcal</td><td><span class="gl-pill gl-pill--off-plan"><svg><use href="#i-x"/></svg>Nicht nach Plan</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block principles" id="grundsaetze">
+    <div class="wrap">
+      <div class="block__head">
+        <p class="eyebrow">Grundsätze</p>
+        <h2>Die App beschreibt. Dein Coach entscheidet.</h2>
+      </div>
+      <div class="grid grid--2">
+        <article class="gl-card">
+          <h3 class="gl-card__title">Beschreiben statt urteilen</h3>
+          <p class="gl-card__text">«2 von 3 ohne Essen vorbei», nicht «Du hast einmal nachgegeben». Kein Lob, kein Tadel, keine Serien.</p>
+        </article>
+        <article class="gl-card">
+          <h3 class="gl-card__title">Nur der Coach ändert Ziele</h3>
+          <p class="gl-card__text">Gluscht passt Kalorien und Makros nie selbst an. Was die Zahlen bedeuten, besprichst du mit deinem Coach.</p>
+        </article>
+        <article class="gl-card">
+          <h3 class="gl-card__title">Schätzungen sind markiert</h3>
+          <p class="gl-card__text">Jeder Eintrag merkt sich seine Quelle: Plan, Foto, Barcode, Datenbank oder manuell. Ein Wert aus einem Foto heisst immer Schätzung.</p>
+        </article>
+        <article class="gl-card">
+          <h3 class="gl-card__title">Einwilligung, einzeln und widerrufbar</h3>
+          <p class="gl-card__text">Gesundheitsdaten, KI-Verarbeitung von Fotos und PDFs, Teilen mit dem Coach: Du stimmst jedem einzeln zu und kannst jede Zustimmung zurückziehen.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block closing">
+    <div class="wrap">
+      <div class="gl-card">
+        <h2>Mit deinem Coach starten</h2>
+        <p>Gluscht läuft als Pilot über TestFlight. Du erhältst einen Einladungscode von deinem Coach und verbindest dich damit in der App. Coaches melden sich im Dashboard mit einem Code per E-Mail an.</p>
+        <div class="actions" style="margin-top:0">
+          <a class="gl-btn" href="https://gluscht.vercel.app">Zum Coach-Dashboard</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Gluscht begleitet ein Coaching und ersetzt es nicht. Die App bietet keine medizinische Ernährungstherapie, keine Diagnose und keine Behandlung von Essstörungen.</p>
+    <p>«Gluscht» ist Schweizerdeutsch für Appetit, Lust auf etwas. © 2026 Gluscht</p>
+  </div>
+</footer>
+
+</body>
+</html>
