@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Gluscht – Ernährungscoaching, Mahlzeit für Mahlzeit</title>
-<meta name="description" content="Gluscht begleitet 1:1-Ernährungscoaching: eine iPhone-App für Klientinnen und Klienten, ein Web-Dashboard für den Coach. Der Coach schreibt den Plan, die App beschreibt, was passiert.">
+<meta name="description" content="Gluscht begleitet 1:1-Ernährungscoaching: eine iPhone-App für Klientinnen und Klienten, ein Web-Dashboard für den Coach. Abhaken, fotografieren oder einfach sagen, was du gegessen hast. Die Ziele setzt dein Coach.">
 <meta property="og:title" content="Gluscht">
 <meta property="og:description" content="Der Plan deines Coachs, Mahlzeit für Mahlzeit.">
 <meta property="og:image" content="icon.png">
@@ -168,6 +168,29 @@ p { margin: 0; }
 .slot__time { font-size: 12px; line-height: 16px; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
 .slot__name { font-size: 14px; line-height: 20px; font-weight: 600; }
 .slot__macro { font-size: 12px; line-height: 16px; color: var(--ink-muted); }
+.ask { display: flex; align-items: center; gap: var(--space-2); margin-top: var(--space-3); padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4); border: 1px solid var(--line); border-radius: var(--radius-pill); background: var(--surface); font-size: 14px; line-height: 20px; color: var(--ink-muted); }
+.ask span { flex: 1; }
+.ask i { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--sand-200); color: var(--ink); }
+.ask i:last-child { background: var(--olive); color: var(--on-olive); }
+.ask svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Assistant section */
+.assist .wrap { display: grid; gap: var(--space-8); align-items: center; }
+@media (min-width: 900px) { .assist .wrap { grid-template-columns: 1fr 1fr; } }
+.assist .block__head { margin-bottom: 0; }
+.assist-points { display: grid; gap: var(--space-3); margin: var(--space-6) 0 0; padding-left: 1.1em; color: var(--ink-muted); }
+.chat { display: grid; gap: var(--space-3); padding: var(--space-6); border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--sand-200); }
+.msg { max-width: 85%; padding: var(--space-2) var(--space-4); border-radius: var(--radius-lg); font-size: 14px; line-height: 20px; }
+.msg--me { justify-self: end; background: var(--olive); color: var(--on-olive); border-bottom-right-radius: var(--radius-sm); }
+.msg--app { justify-self: start; background: var(--surface); border-bottom-left-radius: var(--radius-sm); }
+.confirm { display: grid; gap: var(--space-3); padding: var(--space-4); border: 1px solid var(--line-strong); border-radius: var(--radius-lg); background: var(--surface); }
+.confirm__head { display: flex; justify-content: space-between; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
+.confirm__title { font-weight: 600; font-size: 14px; line-height: 20px; }
+.confirm__rows { display: grid; gap: 4px; font-size: 13px; line-height: 18px; color: var(--ink-muted); }
+.confirm__rows div { display: flex; justify-content: space-between; gap: var(--space-3); }
+.confirm__rows span:last-child { font-variant-numeric: tabular-nums; }
+.confirm__actions { display: flex; gap: var(--space-2); }
+.confirm__actions .gl-btn { flex: 1; pointer-events: none; }
 
 /* Sections ------------------------------------------------------------- */
 section.block { padding: var(--space-12) 0; }
@@ -242,6 +265,10 @@ footer p { max-width: 60em; }
   <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 016.5 3H20v15H6.5A2.5 2.5 0 004 20.5z"/><path d="M4 20.5A2.5 2.5 0 016.5 18H20v3H6.5"/></symbol>
   <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0112 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 004 0"/></symbol>
   <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0112 7.6 4.3 4.3 0 0119.5 10c0 5.4-7.5 10-7.5 10z"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0013 0M12 17.5V21"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></symbol>
+  <symbol id="i-widget" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="17" height="7" rx="2"/></symbol>
+  <symbol id="i-note" viewBox="0 0 24 24"><path d="M5 4h14v11l-5 5H5z"/><path d="M14 20v-5h5M8.5 9h7M8.5 12.5h4"/></symbol>
 </svg>
 
 <header class="top">
@@ -252,6 +279,7 @@ footer p { max-width: 60em; }
     </a>
     <nav aria-label="Seitennavigation">
       <a class="plain" href="#app">App</a>
+      <a class="plain" href="#assistent">Assistent</a>
       <a class="plain" href="#coaches">Für Coaches</a>
       <a class="plain" href="#grundsaetze">Grundsätze</a>
       <a class="gl-btn gl-btn--ghost gl-btn--small" href="https://gluscht.vercel.app">Coach-Login</a>
@@ -265,7 +293,7 @@ footer p { max-width: 60em; }
       <div>
         <p class="eyebrow">Ernährungscoaching für iPhone und Web</p>
         <h1>Der Plan deines Coachs, Mahlzeit für Mahlzeit.</h1>
-        <p class="lead">Gluscht zeigt dir, was heute auf dem Plan steht, macht das Erfassen in unter einer Minute möglich und beschreibt, was deine Daten sagen. Die Ziele setzt dein Coach.</p>
+        <p class="lead">Gluscht zeigt dir, was heute auf dem Plan steht, und beschreibt, was deine Daten sagen. Erfassen geht in unter einer Minute: abhaken, fotografieren oder einfach sagen, was du gegessen hast. Die Ziele setzt dein Coach.</p>
         <div class="actions">
           <a class="gl-btn" href="#app">So funktioniert die App</a>
           <a class="gl-btn gl-btn--ghost" href="#coaches">Für Coaches</a>
@@ -278,6 +306,7 @@ footer p { max-width: 60em; }
         <div class="phone">
           <div class="phone__title">Heute</div>
           <div class="seg" role="presentation"><span aria-current="true">Trainingstag</span><span>Ruhetag</span></div>
+          <div class="ask"><span>Was hast du gegessen?</span><i><svg><use href="#i-camera"/></svg></i><i><svg><use href="#i-mic"/></svg></i></div>
           <div class="targets">
             <div class="bar"><div class="bar__row"><b>Energie</b><span>1315 / 2600 kcal</span></div><div class="bar__track"><div class="bar__fill" style="width:51%"></div></div></div>
             <div class="bar"><div class="bar__row"><b>Protein</b><span>70 / 165 g</span></div><div class="bar__track"><div class="bar__fill" style="width:42%"></div></div></div>
@@ -312,15 +341,26 @@ footer p { max-width: 60em; }
           <h3 class="gl-card__title">Erfassen</h3>
           <ul>
             <li>Abhaken: nach Plan, teilweise, nicht nach Plan</li>
-            <li>Foto-Schätzung, die du vor dem Speichern prüfst</li>
-            <li>Barcode-Scan und Schweizer Nährwertdatenbank</li>
-            <li>Manuelle Eingabe als Rückfallebene</li>
+            <li>Sagen oder schreiben, was du gegessen hast</li>
+            <li>Foto-Schätzung, auf Wunsch mit Beschreibung, die du vor dem Speichern prüfst</li>
+            <li>«Kürzlich gegessen» mit einem Tipp nochmals eintragen</li>
+            <li>Barcode-Scan, Schweizer Nährwertdatenbank, manuelle Eingabe</li>
           </ul>
+        </article>
+        <article class="gl-card">
+          <div class="disc"><svg><use href="#i-star"/></svg></div>
+          <h3 class="gl-card__title">Rezepte</h3>
+          <p class="gl-card__text">Die Rezepte aus dem Plan deines Coachs und deine eigenen: Rezepte, Mahlzeiten, die du oft zusammen isst, und einzelne Lebensmittel in deiner üblichen Menge. Favoriten erscheinen beim Erfassen zuerst.</p>
         </article>
         <article class="gl-card">
           <div class="disc"><svg><use href="#i-trend"/></svg></div>
           <h3 class="gl-card__title">Fortschritt</h3>
-          <p class="gl-card__text">Gewicht als Messpunkte mit Trendlinie, das geschätzte tatsächliche Defizit neben dem geplanten, Plantreue und Trainingstage pro Woche.</p>
+          <p class="gl-card__text">Gewicht als Messpunkte mit Trendlinie, das geschätzte tatsächliche Defizit neben dem geplanten, Plantreue, Trainingstage und Supplemente pro Woche.</p>
+        </article>
+        <article class="gl-card">
+          <div class="disc"><svg><use href="#i-widget"/></svg></div>
+          <h3 class="gl-card__title">Widgets und Siri</h3>
+          <p class="gl-card__text">Auf dem Home- und Sperrbildschirm: wie viel Protein noch fehlt und die nächste Mahlzeit. Nächste Mahlzeit nach Plan oder ein Supplement direkt im Widget eintragen, oder per Siri und Kurzbefehle.</p>
         </article>
         <article class="gl-card">
           <div class="disc"><svg><use href="#i-book"/></svg></div>
@@ -330,13 +370,51 @@ footer p { max-width: 60em; }
         <article class="gl-card">
           <div class="disc"><svg><use href="#i-bell"/></svg></div>
           <h3 class="gl-card__title">Erinnerungen</h3>
-          <p class="gl-card__text">Mahlzeiten, Snack vor dem Training, Kreatin, Wägen. Jede einzeln schaltbar, und standardmässig nur die, die du einschaltest.</p>
+          <p class="gl-card__text">Mahlzeiten, Snack vor dem Training, Kreatin, Wägen. Jede einzeln schaltbar, und nur die, die du einschaltest. Die Wäge-Erinnerung entfällt an Tagen, an denen du dich schon gewogen hast. Wenn dein Coach den Plan anpasst, erfährst du es am Morgen, an dem er gilt.</p>
         </article>
         <article class="gl-card">
           <div class="disc"><svg><use href="#i-heart"/></svg></div>
           <h3 class="gl-card__title">Apple Health</h3>
-          <p class="gl-card__text">Gewicht, Körperfett und Trainings kommen aus Apple Health, wenn du es erlaubst. Jede Berechtigung lässt sich widerrufen.</p>
+          <p class="gl-card__text">Gewicht, Körperfett und Trainings kommen aus Apple Health, wenn du es erlaubst. Auf Wunsch sichert Gluscht deine Mahlzeiten mit Energie und Makros in Apple Health. Jede Berechtigung lässt sich widerrufen.</p>
         </article>
+        <article class="gl-card">
+          <div class="disc"><svg><use href="#i-note"/></svg></div>
+          <h3 class="gl-card__title">Notizen für den Coach</h3>
+          <p class="gl-card__text">Was dir zwischen zwei Check-ins auffällt, schreibst du als Notiz für deinen Coach, auf dem Plan-Bildschirm oder über den Assistenten. Dein Coach sieht sie vor dem Gespräch und markiert sie als besprochen.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block assist" id="assistent">
+    <div class="wrap">
+      <div>
+        <div class="block__head">
+          <p class="eyebrow">Einfach sagen</p>
+          <h2>Erzähl Gluscht, was du gegessen hast.</h2>
+          <p>Per Stimme oder Text, auf Deutsch oder Englisch. Der Assistent kann alles, was die App kann: erfassen, nachschlagen, Rezepte anlegen, eine Notiz für deinen Coach schreiben.</p>
+        </div>
+        <ul class="assist-points">
+          <li>Jede Änderung erscheint zuerst als Karte. Gespeichert wird erst, wenn du bestätigst.</li>
+          <li>Zeig ein Foto deiner Mahlzeit im Chat. Die Werte bleiben als Schätzung markiert.</li>
+          <li>Mit Siri: «Frag Gluscht». Die Sprache wird wenn möglich auf dem iPhone erkannt.</li>
+          <li>Unterhaltungen werden nicht gespeichert und enden, wenn du den Assistenten schliesst.</li>
+        </ul>
+      </div>
+
+      <div class="chat" aria-label="Beispiel: Erfassen im Gespräch mit dem Assistenten">
+        <div class="msg msg--me">Ich hatte den Schoko-Erdnuss-Shake als Znüni.</div>
+        <div class="msg msg--app">Ich trage ihn als Znüni ein, so wie im Rezept deines Coachs.</div>
+        <div class="confirm">
+          <div class="confirm__head"><span class="confirm__title">Znüni · 09:45</span><span class="gl-pill gl-pill--on-plan"><svg><use href="#i-check"/></svg>Nach Plan</span></div>
+          <div class="confirm__rows">
+            <div><span>Schoko-Erdnuss-Shake</span><span>1 Portion</span></div>
+            <div><span>Energie · Protein</span><span>410 kcal · 38 g</span></div>
+          </div>
+          <div class="confirm__actions"><span class="gl-btn gl-btn--ghost gl-btn--small" aria-hidden="true">Anpassen</span><span class="gl-btn gl-btn--small" aria-hidden="true">Speichern</span></div>
+        </div>
+        <div class="msg msg--me">Wie viel Protein fehlt mir heute noch?</div>
+        <div class="msg msg--app">Mit dem Shake bist du bei 108 von 165 g. Es fehlen noch 57 g; das Abendessen im Plan bringt etwa 45 g.</div>
       </div>
     </div>
   </section>
@@ -377,10 +455,12 @@ footer p { max-width: 60em; }
           <p>Im Web-Dashboard schreibst und versionierst du Pläne und siehst, wie es deinen Klientinnen und Klienten geht.</p>
         </div>
         <div class="coach-list">
-          <div><b>Klientenliste</b><span>Plantreue der Woche, Richtung des Gewichtstrends, letzter Eintrag. Markiert, wer Aufmerksamkeit braucht.</span></div>
-          <div><b>Planeditor</b><span>Tagestypen, Ziele, Mahlzeiten, bedingte Mahlzeiten, Supplemente, Optionen und Rezepte. Jede Änderung wird eine neue Version mit Gültigkeitsdatum.</span></div>
-          <div><b>PDF-Import</b><span>Lade einen bestehenden Plan hoch. Die KI füllt den Editor, du prüfst jedes Feld vor dem Veröffentlichen.</span></div>
-          <div><b>Check-in-Bericht</b><span>Wöchentliche Zusammenfassung pro Person, im Dashboard oder als PDF.</span></div>
+          <div><b>Klientenliste</b><span>Plantreue der Woche, Richtung des Gewichtstrends, letzter Eintrag und der nächste Check-in. Hinweise mit nachvollziehbarer Regel zeigen, wer Aufmerksamkeit braucht: zum Beispiel mehr Heisshunger, öfter Foto-Schätzungen oder eine offene Notiz.</span></div>
+          <div><b>Wochenansicht</b><span>Die Zusammenfassung oben, darunter Tabs für Plantreue und Mahlzeiten, Gewicht und Energie, Training und Heisshunger.</span></div>
+          <div><b>Planeditor und Rezeptbibliothek</b><span>Tagestypen, Ziele, Mahlzeiten, bedingte Mahlzeiten, Supplemente, Optionen und Rezepte aus deiner Bibliothek. Jede Änderung wird eine neue Version mit Gültigkeitsdatum; zwei Versionen lassen sich vergleichen, mit den Kennzahlen der 14 Tage davor und danach.</span></div>
+          <div><b>PDF-Import</b><span>Lade einen bestehenden Plan hoch. Die KI füllt den Editor und markiert unsichere Felder; du prüfst jedes Feld vor dem Veröffentlichen.</span></div>
+          <div><b>Coach-Assistent</b><span>Ein Chat auf jeder Seite: frag nach einer Person oder lass einen Planentwurf anpassen. Jede Änderung bestätigst du auf einer Karte, veröffentlicht wird nie automatisch.</span></div>
+          <div><b>Check-in-Bericht</b><span>Wöchentliche Zusammenfassung pro Person mit offenen Notizen, im Dashboard oder als PDF.</span></div>
         </div>
         <div class="actions"><a class="gl-btn" href="https://gluscht.vercel.app">Zum Coach-Dashboard</a></div>
       </div>
@@ -391,6 +471,9 @@ footer p { max-width: 60em; }
           <div class="gl-stat"><span class="gl-stat__label">Plantreue</span><span class="gl-stat__value">82 %</span><span class="gl-stat__sub">6 von 7 Tagen erfasst</span></div>
           <div class="gl-stat"><span class="gl-stat__label">Trendgewicht</span><span class="gl-stat__value">83.9 kg</span><span class="gl-stat__sub">−0.4 kg zur Vorwoche</span></div>
           <div class="gl-stat gl-stat--accent"><span class="gl-stat__label">Geschätztes Defizit</span><span class="gl-stat__value">430 kcal</span><span class="gl-stat__sub">geplant 500 kcal</span></div>
+        </div>
+        <div style="padding: 0 var(--space-6) var(--space-4)">
+          <div class="gl-banner"><span class="gl-banner__title">Offene Notiz · Check-in am Montag</span><span>«Am Samstag bin ich an einer Hochzeit. Wie plane ich das?»</span></div>
         </div>
         <div class="dash__scroll">
           <table>
@@ -427,8 +510,16 @@ footer p { max-width: 60em; }
           <p class="gl-card__text">Jeder Eintrag merkt sich seine Quelle: Plan, Foto, Barcode, Datenbank oder manuell. Ein Wert aus einem Foto heisst immer Schätzung.</p>
         </article>
         <article class="gl-card">
+          <h3 class="gl-card__title">Bestätigen, dann speichern</h3>
+          <p class="gl-card__text">Was der Assistent vorbereitet, in der App wie im Dashboard, erscheint zuerst als Karte. Nichts wird gespeichert oder veröffentlicht, bevor du bestätigst.</p>
+        </article>
+        <article class="gl-card">
           <h3 class="gl-card__title">Einwilligung, einzeln und widerrufbar</h3>
-          <p class="gl-card__text">Gesundheitsdaten, KI-Verarbeitung von Fotos und PDFs, Teilen mit dem Coach: Du stimmst jedem einzeln zu und kannst jede Zustimmung zurückziehen.</p>
+          <p class="gl-card__text">Gesundheitsdaten, KI für Fotos, Teilen mit dem Coach, der Assistent, der Assistent deines Coachs: Du stimmst jedem einzeln zu und kannst jede Zustimmung zurückziehen.</p>
+        </article>
+        <article class="gl-card">
+          <h3 class="gl-card__title">Gespeichert in der Schweiz</h3>
+          <p class="gl-card__text">Deine Daten liegen in einem Rechenzentrum in Zürich. Mahlzeitenfotos werden nach 90 Tagen gelöscht. Keine Werbung, kein Tracking. Exportiere deine Daten oder lösche dein Konto jederzeit in der App.</p>
         </article>
       </div>
     </div>
